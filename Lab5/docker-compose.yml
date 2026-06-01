@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  s1:
+    build: ./C4_S1
+    container_name: S1
+    hostname: S1
+    networks:
+      labnet:
+        ipv4_address: 172.20.0.10
+    ports:
+      - "2222:22"
+
+  c1:
+    build: ./C1
+    container_name: C1
+    hostname: C1
+    networks:
+      - labnet
+    depends_on:
+      - s1
+    stdin_open: true
+    tty: true
+
+  c2:
+    build: ./C2
+    container_name: C2
+    hostname: C2
+    networks:
+      - labnet
+    depends_on:
+      - s1
+    stdin_open: true
+    tty: true
+
+  c3:
+    build: ./C3
+    container_name: C3
+    hostname: C3
+    networks:
+      - labnet
+    depends_on:
+      - s1
+    stdin_open: true
+    tty: true
+
+  c4:
+    build: ./C4_S1
+    container_name: C4
+    hostname: C4
+    networks:
+      - labnet
+    depends_on:
+      - s1
+    stdin_open: true
+    tty: true
+    entrypoint: ["/bin/bash"]
+
+networks:
+  labnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
