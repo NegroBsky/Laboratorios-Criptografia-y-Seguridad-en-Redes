@@ -1,9 +1,4 @@
 FROM ubuntu:18.10
-
-RUN sed -i 's|http://archive.ubuntu.com|http://old-releases.ubuntu.com|g' /etc/apt/sources.list && \
-    sed -i 's|http://security.ubuntu.com|http://old-releases.ubuntu.com|g' /etc/apt/sources.list && \
-    apt-get update && \
-    apt-get install -y openssh-client && \
-    rm -rf /var/lib/apt/lists/*
-
-CMD ["/bin/bash"]
+RUN sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
+RUN apt-get update && apt-get install -y openssh-client tcpdump && rm -rf /var/lib/apt/lists/*
+CMD ["tail", "-f", "/dev/null"]
